@@ -536,3 +536,17 @@ class RenameSeasonFolders(AddSizeAndSceneNameFields):
         self.connection.action("DROP TABLE tmp_tv_shows")
 
         self.incDBVersion()
+
+class AddSceneNumbers(FixAirByDateSetting):
+
+    def test(self):
+        return self.checkDBVersion() >= 12
+
+    def execute(self):
+
+       if not self.hasColumn("tv_episodes", "scene_episode"):
+        self.addColumn("tv_episodes", "scene_episode", "NUMERIC", "NULL")
+       if not self.hasColumn("tv_episodes", "scene_season"):
+        self.addColumn("tv_episodes", "scene_season", "NUMERIC", "NULL")
+
+        self.incDBVersion()
